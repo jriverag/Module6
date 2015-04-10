@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Add New Category</title>
+    <script>
+function CreateCategory()
+{
+    var objRequest = new XMLHttpRequest();
+    var url = "http://bus-pluto.ad.uab.edu/jsonwebservice/service1.svc/createCategory";
+    
+    var customerid = document.getElementById("catname").value;
+    var customername = document.getElementById("catdesc").value;
+    
+    var newcustomer = '{"CName":"' + customerid + '","CDescription":"' + customername + '"}';
+    
+    objRequest.onreadystatechange = function()
+    {
+        if (objRequest.readyState == 4 && objRequest.status == 200)
+        {
+            var result = JSON.parse(objRequest.responseText);
+            OperationResult(result);
+        }
+    }
+    
+    objRequest.open("POST",url,true);
+    objRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    objRequest.send(newcustomer);
+    
+}
+
+function OperationResult(output)
+{
+    if (output.WasSuccessful == 1)
+    {
+        document.getElementById("result").innerHTML = "The operation was successful!";
+    }
+    else
+    {
+        document.getElementById("result").innerHTML = "The operation was not successful!" + "<br>" + output.Exception;
+    }
+}
+    </script>
+</head>
+
+<body>
+<h1>New Category Demonstration</h1>
+    <hr>
+    <br>
+    <label>Please Enter a new Category: </label>
+    <input type="text" id="catname">
+    <br>
+    <label>Please enter the Category Description: </label>
+    <input type="text" id="catdesc">
+    <br>
+    <button onclick="CreateCategory()" id="newcat">Add a New Category</button>
+    <br>
+    <hr>
+    <br>
+    <label id="result">The operation's result will display here.</label>
+
+
+
+</body>
+</html>
